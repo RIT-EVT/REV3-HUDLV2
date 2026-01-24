@@ -1,0 +1,80 @@
+# https://tavotech.com/how-to-use-github-with-stm32cubeide
+# https://community.st.com/t5/stm32cubeide-mcus/standard-gitignore-project-setup-for-sharing-stm32cube-projects/m-p/831188/highlight/true#M38158
+# used as a reference
+
+# Eclipse Backup System
+*.bak
+
+# MacOS Gremlin
+*.DS_Store
+
+# Metadata
+.metadata/
+/*/.metadata/
+
+# Build folder contents
+/*/Debug/
+/*/Release/
+
+# # Generated on Build
+## Prerequisites
+*.d
+## Object files
+*.o
+*.ko
+*.obj
+*.elf
+## Linker output
+*.ilk
+*.map
+*.exp
+## Libraries
+# Too many issues when these got removed
+# *.lib
+# *.a
+# *.la
+# *.lo
+## Shared objects
+*.dll
+*.so
+*.so.*
+*.dylib
+## Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+*.bin
+## Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+## Launch instructions
+# *.launch
+## Human Readable
+*.list
+*.map
+## Makefiles
+*.mk
+*/makefile
+
+# Cyclomatic Complexity
+*.cylco
+
+# TouchGFX files
+*/touchgfx_backup/*
+# */TouchGFX/generated/*/cache/
+# */TouchGFX/generated/*/user.config
+# */TouchGFX/config/
+# *backup.touchgfx
+
+
+# environment files
+*/.settings/
+.settings/
+!.settings/org.eclipse.core.resources.prefs
+!*/.settings/org.eclipse.core.resources.prefs
+
