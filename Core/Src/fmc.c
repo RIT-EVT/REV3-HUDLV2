@@ -24,6 +24,7 @@
 /* USER CODE BEGIN 0 */
 #include "stm32f4xx_hal.h"
 #include "usart.h"
+#include "stdio.h"
 
 void init_chip() {
 	FMC_SDRAM_CommandTypeDef Command;
@@ -33,7 +34,7 @@ void init_chip() {
 	Command.CommandMode            = FMC_SDRAM_CMD_CLK_ENABLE;
 	Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK1;
 	Command.AutoRefreshNumber      = 1;
-	Command.ModeRegisterDefinition = 0;
+ 	Command.ModeRegisterDefinition = 0;
 
 	/* Send the command */
 	HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
@@ -49,17 +50,19 @@ void init_chip() {
 
 	Command.CommandMode = FMC_SDRAM_CMD_AUTOREFRESH_MODE;
 	Command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
-	Command.AutoRefreshNumber = 8;
+	Command.AutoRefreshNumber = 2;
 	Command.ModeRegisterDefinition = 0;
 
 	HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
 
+	HAL_Delay(1);
+
 	/* Step 7: Program the external memory mode register */
-	tmpmrd = (uint32_t) 0x0000 | // Set Burst length of 1
-						0x0000 | // Sequential Burst Mode,
-						0x0010 | // CAS latency of 3 Clock Cycles
-						0x0000 | // Standard Operating Mode
-						0x0200 ; // Single Write Burst Mode
+	tmpmrd = (uint32_t) LOAD_MODE_BURST_LENGTH_1 |
+						LOAD_MODE_BURST_TYPE_SEQUENTIAL |
+						LOAD_MODE_LATENCY_MODE_2 |
+						LOAD_MODE_OPERATING_MODE_STANDARD |
+						LOAD_MODE_WRITE_BURST_MODE_PROGRAMMED;
 
 	Command.CommandMode = FMC_SDRAM_CMD_LOAD_MODE;
 	Command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
@@ -68,12 +71,15 @@ void init_chip() {
 
 	/* Send the command */
 	HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
-//	HAL_UART_Transmit(&huart1,(uint8_t*) 0xC0000000, 4, 0xFFFF);
 
-//	uint32_t* addr = STARTING_ADDR;
-//	for (int i = 0; i < 1000; i++) {
-//		*(addr++) = 0;
-//	}
+	HAL_SDRAM_ProgramRefreshRate(&hsdram1, SDRAM_CLK_PER_REFRESH);
+}
+
+void fill_buffer() {
+	volatile uint16_t* addr = (volatile uint16_t*)STARTING_ADDR;
+	for (int i = 0; i < 1000; i++, addr++) {
+		*addr = 0;
+	}
 }
 /* USER CODE END 0 */
 
@@ -111,16 +117,16 @@ void MX_FMC_Init(void)
   hsdram1.Init.CASLatency = FMC_SDRAM_CAS_LATENCY_2;
   hsdram1.Init.WriteProtection = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
   hsdram1.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_2;
-  hsdram1.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;
-  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_0;
+  hsdram1.Init.ReadBurst = FMC_SDRAM_RBURST_DISABLE;
+  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;
   /* SdramTiming */
-  SdramTiming.LoadToActiveDelay = 2;
-  SdramTiming.ExitSelfRefreshDelay = 10;
-  SdramTiming.SelfRefreshTime = 2;
-  SdramTiming.RowCycleDelay = 16;
-  SdramTiming.WriteRecoveryTime = 16;
-  SdramTiming.RPDelay = 16;
-  SdramTiming.RCDDelay = 16;
+//  SdramTiming.LoadToActiveDelay = 2;
+//  SdramTiming.ExitSelfRefreshDelay = 10;
+//  SdramTiming.SelfRefreshTime = 2;
+//  SdramTiming.RowCycleDelay = 16;
+//  SdramTiming.WriteRecoveryTime = 16;
+//  SdramTiming.RPDelay = 16;
+//  SdramTiming.RCDDelay = 16;
 
   if (HAL_SDRAM_Init(&hsdram1, &SdramTiming) != HAL_OK)
   {

@@ -93,19 +93,20 @@ typedef FMC_GPIO 	FMC_CMD;
 #define FMC_SDNRAS	((FMC_CMD) 		{GPIO_PIN_11, GPIOF})
 
 // #define FMC_ 		((GPIO) {GPIO_PIN_x, GPIOx})
-
-#define SDRAM_CLK_SPEED ((uint32_t)(HAL_RCC_GetSysClockFreq() / 2))
-#define SDRAM_CLK_PERIOD_US (1000000000UL / (SDRAM_CLK_SPEED / 1000)) // LOSES SOME RESOLUTION, BUT ITS NEEDED TO FIT WITHIN 32-BITS
-#define NS_TO_SDRAM_CLK_CYCLES(NS) (NS * 1000 + SDRAM_CLK_PERIOD_US) / (SDRAM_CLK_PERIOD_US)
+#define SYSCLK_HZ					(180000000) // Hz // Needs to be set manually because the HAL_RCC_GetSysClockFreq() is unreliable
+#define SDRAM_CLK_HZ 				(SYSCLK_HZ / 2)
+#define SDRAM_CLK_MHZ				(SDRAM_CLK_HZ / 1000000)
+#define SDRAM_CLK_PERIOD_NS 		(1000000000UL / (SDRAM_CLK_HZ / 1000)) // LOSES SOME RESOLUTION, BUT ITS NEEDED TO FIT WITHIN 32-BITS
+#define NS_TO_SDRAM_CLK_CYCLES(NS) 	((NS * 1000) / (SDRAM_CLK_PERIOD_NS) + 1)
 
 // All of these can be found in the datasheet of the Ram chip
 #define tRCD 							( 15 )
 #define tRP 							( 15 )
-#define tWR 							( 10 ) // only specifies two clock cycles
+#define tWR 							( 22 ) // only specifies two clock cycles
 #define tRC 							( 63 )
 #define tRAS 							( 42 )
 #define tXSR 							( 70 )
-#define tMRD 							( 10 ) // only specifies two clock cycles
+#define tMRD 							( 22 ) // only specifies two clock cycles
 
 // Specific names from the FMC
 #define ROW_TO_COLUMN_DELAY_NS 			( tRCD )
@@ -125,9 +126,61 @@ typedef FMC_GPIO 	FMC_CMD;
 #define EXIT_SELF_REFRESH_DELAY 		( NS_TO_SDRAM_CLK_CYCLES( tXSR ) )
 #define LOAD_MODE_REGISTER_TO_ACTIVE 	( NS_TO_SDRAM_CLK_CYCLES( tMRD ) )
 
+// Mode Register Definition
+// // These can only be guaranteed to work with ISSI IS42S16400-series SDRAM
+// // Burst Length
+// // // Bit Definitions
+#define LOAD_MODE_BURST_LENGTH_MASK		(0x007)
+#define LOAD_MODE_BURST_LENGTH_POSITION	(0)
+// // // Valid Burst Length Commands
+#define LOAD_MODE_BURST_LENGTH_1		(0b000 << LOAD_MODE_BURST_LENGTH_POSITION)
+#define LOAD_MODE_BURST_LENGTH_2		(0b001 << LOAD_MODE_BURST_LENGTH_POSITION)
+#define LOAD_MODE_BURST_LENGTH_4		(0b010 << LOAD_MODE_BURST_LENGTH_POSITION)
+#define LOAD_MODE_BURST_LENGTH_8		(0b011 << LOAD_MODE_BURST_LENGTH_POSITION)
+#define LOAD_MODE_BURST_LENGTH_PAGE		(0b111 << LOAD_MODE_BURST_LENGTH_POSITION) // Only Works with
 
-#define	RAM_SIZE						(0x4000000) // 64 megabits
-#define STARTING_ADDR					((uint32_t*)0xC000000)
+// // Burst Type
+// // // Bit Definitions
+#define LOAD_MODE_BURST_TYPE_MASK			(0x008)
+#define LOAD_MODE_BURST_TYPE_POSITION		(3)
+// // // Valid Burst Type Commands
+#define LOAD_MODE_BURST_TYPE_SEQUENTIAL		(0x000)
+#define LOAD_MODE_BURST_TYPE_INTERLEAVE 	(LOAD_MODE_BURST_TYPE_MASK)
+
+// // Latency Mode (CAS LATENCY)
+// // // Bit Definitions
+#define LOAD_MODE_LATENCY_MODE_MASK			(0x070)
+#define LOAD_MODE_LATENCY_MODE_POSITION		(4)
+// // // Valid Latency Mode Commands
+#define LOAD_MODE_LATENCY_MODE_2			(0b010 << LOAD_MODE_LATENCY_MODE_POSITION)
+#define LOAD_MODE_LATENCY_MODE_3			(0b011 << LOAD_MODE_LATENCY_MODE_POSITION)
+
+// //  Operating Mode
+// // // Bit Definitions
+#define LOAD_MODE_OPERATING_MODE_MASK		(0x180)
+#define LOAD_MODE_OPERATING_MODE_POSITION	(7)
+// // // Valid Operating Mode Commands
+#define LOAD_MODE_OPERATING_MODE_STANDARD	(0b00 << LOAD_MODE_OPERATING_MODE_POSITION)
+
+// // Write Burst Mode
+// // // Bit Definitions
+#define LOAD_MODE_WRITE_BURST_MODE_MASK			(0x200)
+#define LOAD_MODE_WRITE_BURST_MODE_POSITION		(9)
+// // // Valid Write Burst Mode Commands
+#define LOAD_MODE_WRITE_BURST_MODE_PROGRAMMED	(0)
+#define LOAD_MODE_WRITE_BURST_MODE_SINGLE		(LOAD_MODE_WRITE_BURST_MODE_MASK)
+
+// // RESERVED
+
+// Refresh Count
+#define ROW_COUNT						(4096)		// Rows
+#define REFRESH_TIME					(64)		// ms
+#define REFRESH_TIME_PER_ROW			(REFRESH_TIME * 1000 / ROW_COUNT) // us
+#define SDRAM_CLK_PER_REFRESH			((REFRESH_TIME_PER_ROW * SDRAM_CLK_MHZ) - 20) // Take 20 for a little cushioning (recommended by reference manual)
+
+#define	RAM_SIZE_BITS					(0x4000000) // 64 Mb
+#define RAM_SIZE_BYTES					(RAM_SIZE_BITS / 8) // 8 MB
+#define STARTING_ADDR					((volatile uint32_t*)0xC000000)
 // ROUNDS UP ONE CLOCK CYCLE AND WILL ALWAYS GIVE AT LEAST
 
 typedef struct {

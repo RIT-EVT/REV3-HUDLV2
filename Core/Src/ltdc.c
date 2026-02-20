@@ -44,14 +44,14 @@ void MX_LTDC_Init(void)
   hltdc.Init.VSPolarity = LTDC_VSPOLARITY_AL;
   hltdc.Init.DEPolarity = LTDC_DEPOLARITY_AH;
   hltdc.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
-  hltdc.Init.HorizontalSync = 48;
-  hltdc.Init.VerticalSync = 1;
-  hltdc.Init.AccumulatedHBP = 88;
-  hltdc.Init.AccumulatedVBP = 32;
-  hltdc.Init.AccumulatedActiveW = 888;
-  hltdc.Init.AccumulatedActiveH = 512;
-  hltdc.Init.TotalWidth = 928;
-  hltdc.Init.TotalHeigh = 517;
+  hltdc.Init.HorizontalSync = 47;
+  hltdc.Init.VerticalSync = 0;
+  hltdc.Init.AccumulatedHBP = 87;
+  hltdc.Init.AccumulatedVBP = 31;
+  hltdc.Init.AccumulatedActiveW = 887;
+  hltdc.Init.AccumulatedActiveH = 511;
+  hltdc.Init.TotalWidth = 927;
+  hltdc.Init.TotalHeigh = 524;
   hltdc.Init.Backcolor.Blue = 0x02;
   hltdc.Init.Backcolor.Green = 0x69;
   hltdc.Init.Backcolor.Red = 0xF7;
@@ -79,7 +79,8 @@ void MX_LTDC_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN LTDC_Init 2 */
-
+//  HAL_LTDC_SetAddress(&hltdc, (uint32_t)0xC0000000, LTDC_LAYER_1);
+  LTDC->IER |= LTDC_IER_LIE;
   /* USER CODE END LTDC_Init 2 */
 
 }
@@ -98,8 +99,8 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* ltdcHandle)
   /** Initializes the peripherals clock
   */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-    PeriphClkInitStruct.PLLSAI.PLLSAIN = 192;
-    PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
+    PeriphClkInitStruct.PLLSAI.PLLSAIN = 146;
+    PeriphClkInitStruct.PLLSAI.PLLSAIR = 5;
     PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
     {
@@ -233,6 +234,9 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* ltdcHandle)
     GPIO_InitStruct.Alternate = GPIO_AF9_LTDC;
     HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
+    /* LTDC interrupt Init */
+    HAL_NVIC_SetPriority(LTDC_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(LTDC_IRQn);
   /* USER CODE BEGIN LTDC_MspInit 1 */
 
   /* USER CODE END LTDC_MspInit 1 */
@@ -301,6 +305,8 @@ void HAL_LTDC_MspDeInit(LTDC_HandleTypeDef* ltdcHandle)
 
     HAL_GPIO_DeInit(GPIOD, GPIO_PIN_3|GPIO_PIN_6);
 
+    /* LTDC interrupt Deinit */
+    HAL_NVIC_DisableIRQ(LTDC_IRQn);
   /* USER CODE BEGIN LTDC_MspDeInit 1 */
 
   /* USER CODE END LTDC_MspDeInit 1 */

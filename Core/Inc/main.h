@@ -60,12 +60,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define SDRAM_REFRESH_TO_REFRESH_NS 63
-#define SDRAM_ACTIVE_TO_ACTIVE_NS 63
-#define SDRAM_ACTIVE_TO_READ_NS 15
-#define SDRAM_ACTIVE_TO_WRITE_NS 15
-#define SDRAM_WRITE_TO_PRECHARGE_NS 010101
-#define SDRAM_ACTIVE_TO_PRECHARGE_NS 42
+#define DISP_EN_Pin GPIO_PIN_13
+#define DISP_EN_GPIO_Port GPIOB
 #define LTDC_BL_PWM_Pin GPIO_PIN_8
 #define LTDC_BL_PWM_GPIO_Port GPIOA
 

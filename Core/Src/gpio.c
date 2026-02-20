@@ -56,7 +56,17 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(DISP_EN_GPIO_Port, DISP_EN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LTDC_BL_PWM_GPIO_Port, LTDC_BL_PWM_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : DISP_EN_Pin */
+  GPIO_InitStruct.Pin = DISP_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(DISP_EN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LTDC_BL_PWM_Pin */
   GPIO_InitStruct.Pin = LTDC_BL_PWM_Pin;

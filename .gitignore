@@ -10,11 +10,11 @@
 
 # Metadata
 .metadata/
-/*/.metadata/
+**/.metadata/
 
 # Build folder contents
-/*/Debug/
-/*/Release/
+**/Debug/
+**/Release/
 
 # # Generated on Build
 ## Prerequisites
@@ -65,7 +65,7 @@
 *.cylco
 
 # TouchGFX files
-*/touchgfx_backup/*
+**/touchgfx_backup/**
 # */TouchGFX/generated/*/cache/
 # */TouchGFX/generated/*/user.config
 # */TouchGFX/config/
@@ -73,8 +73,8 @@
 
 
 # environment files
-*/.settings/
+**/.settings/
 .settings/
 !.settings/org.eclipse.core.resources.prefs
-!*/.settings/org.eclipse.core.resources.prefs
+!**/.settings/org.eclipse.core.resources.prefs
 
