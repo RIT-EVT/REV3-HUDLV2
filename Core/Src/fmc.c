@@ -96,13 +96,13 @@ void MX_FMC_Init(void)
 
   /* USER CODE BEGIN FMC_Init 1 */
   /* SdramTiming */
-    SdramTiming.LoadToActiveDelay = LOAD_MODE_REGISTER_TO_ACTIVE;
-    SdramTiming.ExitSelfRefreshDelay = EXIT_SELF_REFRESH_DELAY;
-    SdramTiming.SelfRefreshTime = SELF_REFRESH_TIME;
-    SdramTiming.RowCycleDelay = ROW_CYCLE_DELAY;
-    SdramTiming.WriteRecoveryTime = RECOVERY_DELAY;
-    SdramTiming.RPDelay = ROW_PRECHARGE_DELAY;
-    SdramTiming.RCDDelay = ROW_TO_COLUMN_DELAY;
+        SdramTiming.LoadToActiveDelay = LOAD_MODE_REGISTER_TO_ACTIVE;
+        SdramTiming.ExitSelfRefreshDelay = EXIT_SELF_REFRESH_DELAY;
+        SdramTiming.SelfRefreshTime = SELF_REFRESH_TIME;
+        SdramTiming.RowCycleDelay = ROW_CYCLE_DELAY;
+        SdramTiming.WriteRecoveryTime = RECOVERY_DELAY;
+        SdramTiming.RPDelay = ROW_PRECHARGE_DELAY;
+        SdramTiming.RCDDelay = ROW_TO_COLUMN_DELAY;
   /* USER CODE END FMC_Init 1 */
 
   /** Perform the SDRAM1 memory initialization sequence
@@ -127,6 +127,10 @@ void MX_FMC_Init(void)
 //  SdramTiming.WriteRecoveryTime = 16;
 //  SdramTiming.RPDelay = 16;
 //  SdramTiming.RCDDelay = 16;
+
+  /* USER CODE BEGIN FMC_Init 1 */
+
+   /* USER CODE END FMC_Init 1 */
 
   if (HAL_SDRAM_Init(&hsdram1, &SdramTiming) != HAL_OK)
   {

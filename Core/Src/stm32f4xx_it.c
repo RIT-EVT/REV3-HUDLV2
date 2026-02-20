@@ -211,7 +211,7 @@ void LTDC_IRQHandler(void)
   /* USER CODE END LTDC_IRQn 0 */
   HAL_LTDC_IRQHandler(&hltdc);
   /* USER CODE BEGIN LTDC_IRQn 1 */
-  HAL_LTDC_ProgramLineEvent(&hltdc,0);
+//  HAL_LTDC_ProgramLineEvent(&hltdc,0);
   /* USER CODE END LTDC_IRQn 1 */
 }
 
