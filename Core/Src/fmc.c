@@ -26,7 +26,7 @@
 #include "usart.h"
 #include "stdio.h"
 
-void init_chip() {
+static void init_chip() {
 	FMC_SDRAM_CommandTypeDef Command;
 	__IO uint32_t tmpmrd =0;
 
@@ -134,7 +134,7 @@ void MX_FMC_Init(void)
   }
 
   /* USER CODE BEGIN FMC_Init 2 */
-
+  init_chip();
   /* USER CODE END FMC_Init 2 */
 }
 

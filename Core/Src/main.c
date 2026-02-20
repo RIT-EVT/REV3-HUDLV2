@@ -18,7 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "ltdc.h"
+#include "usart.h"
 #include "gpio.h"
+#include "fmc.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -86,6 +89,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_FMC_Init();
+  MX_USART1_UART_Init();
+  MX_LTDC_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Transmit(&huart1,(uint8_t*)"I'm almost\r\n", 13, 0xFFFFFFFF);
 //  uint8_t* addr = (uint8_t*) 0xC0000000;
