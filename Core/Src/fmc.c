@@ -78,7 +78,7 @@ static void init_chip() {
 void fill_buffer() {
 	volatile uint16_t* addr = (volatile uint16_t*)STARTING_ADDR;
 	for (int i = 0; i < 1000; i++, addr++) {
-		*addr = 0;
+		*addr = 0xFFFF;
 	}
 }
 /* USER CODE END 0 */
@@ -120,17 +120,13 @@ void MX_FMC_Init(void)
   hsdram1.Init.ReadBurst = FMC_SDRAM_RBURST_DISABLE;
   hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;
   /* SdramTiming */
-//  SdramTiming.LoadToActiveDelay = 2;
-//  SdramTiming.ExitSelfRefreshDelay = 10;
-//  SdramTiming.SelfRefreshTime = 2;
-//  SdramTiming.RowCycleDelay = 16;
-//  SdramTiming.WriteRecoveryTime = 16;
-//  SdramTiming.RPDelay = 16;
-//  SdramTiming.RCDDelay = 16;
-
-  /* USER CODE BEGIN FMC_Init 1 */
-
-   /* USER CODE END FMC_Init 1 */
+  SdramTiming.LoadToActiveDelay = 2;
+  SdramTiming.ExitSelfRefreshDelay = 10;
+  SdramTiming.SelfRefreshTime = 2;
+  SdramTiming.RowCycleDelay = 16;
+  SdramTiming.WriteRecoveryTime = 16;
+  SdramTiming.RPDelay = 16;
+  SdramTiming.RCDDelay = 16;
 
   if (HAL_SDRAM_Init(&hsdram1, &SdramTiming) != HAL_OK)
   {
@@ -139,6 +135,8 @@ void MX_FMC_Init(void)
 
   /* USER CODE BEGIN FMC_Init 2 */
   init_chip();
+
+  fill_buffer();
   /* USER CODE END FMC_Init 2 */
 }
 

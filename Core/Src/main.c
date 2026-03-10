@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,17 +95,21 @@ int main(void)
   MX_LTDC_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Transmit(&huart1,(uint8_t*)"I'm almost\r\n", 13, 0xFFFFFFFF);
-//  uint8_t* addr = (uint8_t*) 0xC0000000;
-//  uint8_t* a = addr;
+  uint8_t* addr = (uint8_t*) STARTING_ADDR;
+  uint8_t s[16];
+
+  HAL_GPIO_WritePin(DISP_EN_GPIO_Port, DISP_EN_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LTDC_BL_PWM_GPIO_Port, LTDC_BL_PWM_Pin, GPIO_PIN_SET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  HAL_UART_Transmit(&huart1, a++, 1, 0x00FF);
-//	  if (a >= addr + RAM_SIZE) {
-//		  a = addr;
+//	  snprintf(s, sizeof(s), "%p", addr);
+//	  HAL_UART_Transmit(&huart1, s, strlen(s), 0x00FF);
+//	  if (addr >= (uint8_t*) (STARTING_ADDR + RAM_SIZE_BYTES)) {
+//		  addr = (uint8_t*)STARTING_ADDR;
 //	  }
     /* USER CODE END WHILE */
 

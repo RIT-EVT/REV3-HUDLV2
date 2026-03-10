@@ -59,7 +59,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(DISP_EN_GPIO_Port, DISP_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LTDC_BL_PWM_GPIO_Port, LTDC_BL_PWM_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LTDC_BL_PWM_GPIO_Port, LTDC_BL_PWM_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : DISP_EN_Pin */
   GPIO_InitStruct.Pin = DISP_EN_Pin;

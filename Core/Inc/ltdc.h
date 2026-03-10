@@ -35,7 +35,11 @@ extern "C" {
 extern LTDC_HandleTypeDef hltdc;
 
 /* USER CODE BEGIN Private defines */
-
+typedef struct {
+	uint8_t blue;
+	uint8_t green;
+	uint8_t red;
+} color;
 /* USER CODE END Private defines */
 
 void MX_LTDC_Init(void);
