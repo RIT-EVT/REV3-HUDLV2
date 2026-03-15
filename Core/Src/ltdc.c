@@ -21,22 +21,17 @@
 #include "ltdc.h"
 
 /* USER CODE BEGIN 0 */
+#include "frame.h"
 
-color* const fb = (color*)0xC0000000;
-
-uint32_t color_index(uint16_t row, uint16_t col) {
-	return row * 480 + col;
-}
-
-void fill_screen() {
+void uv_coords() {
 	color* current = fb;
 
 	float current_red = 0;
 	float current_green = 0;
 
-	float frac_red = 255.0 / 480;
-	float frac_green = 255.0 / 800;
-	
+	float frac_red = 150.0 / 480;
+	float frac_green = 100.0 / 800;
+
 	for (int v = 0; v < 480; v++) {
 		for (int h = 0; h < 800; h++) {
 			current->green = (uint8_t) current_green;
@@ -48,10 +43,19 @@ void fill_screen() {
 		current_red += frac_red;
 		current_green = 0;
 	}
-
-
 }
 
+void disable_display() {
+	HAL_GPIO_WritePin(DISP_EN_GPIO_Port, DISP_EN_Pin, GPIO_PIN_RESET);
+}
+
+void enable_display() {
+	HAL_GPIO_WritePin(DISP_EN_GPIO_Port, DISP_EN_Pin, GPIO_PIN_SET);
+}
+
+void HAL_LTDC_ReloadEventCallback(LTDC_HandleTypeDef *hltdc) {
+
+}
 
 /* USER CODE END 0 */
 
@@ -110,9 +114,10 @@ void MX_LTDC_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN LTDC_Init 2 */
+  __HAL_LTDC_ENABLE_IT(&hltdc, LTDC_IT_RR);
 //  HAL_LTDC_SetAddress(&hltdc, (uint32_t)0xC0000000, LTDC_LAYER_1);
 //  LTDC->IER |= LTDC_IER_LIE;
-  fill_screen();
+//  fill_screen();
   /* USER CODE END LTDC_Init 2 */
 
 }

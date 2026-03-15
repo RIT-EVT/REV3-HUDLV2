@@ -180,7 +180,8 @@ typedef FMC_GPIO 	FMC_CMD;
 
 #define	RAM_SIZE_BITS					(0x4000000) // 64 Mb
 #define RAM_SIZE_BYTES					(RAM_SIZE_BITS / 8) // 8 MB
-#define STARTING_ADDR					((volatile uint32_t*)0xC0000000)
+#define RAM_START_ADDR					((volatile void*)0xC0000000)
+#define RAM_END_ADDR					(RAM_START_ADDR + RAM_SIZE_BYTES - 1)
 // ROUNDS UP ONE CLOCK CYCLE AND WILL ALWAYS GIVE AT LEAST
 
 typedef struct {

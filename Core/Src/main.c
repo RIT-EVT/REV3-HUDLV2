@@ -18,15 +18,18 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "ltdc.h"
 #include "usart.h"
 #include "gpio.h"
-#include "fmc.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
+
+#include "fmc.h"
+#include "ltdc.h"
+
+#include "heap.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,27 +93,22 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_FMC_Init();
   MX_USART1_UART_Init();
-  MX_LTDC_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Transmit(&huart1,(uint8_t*)"I'm almost\r\n", 13, 0xFFFFFFFF);
-  uint8_t* addr = (uint8_t*) STARTING_ADDR;
-  uint8_t s[16];
+  heap_init();
 
-  HAL_GPIO_WritePin(DISP_EN_GPIO_Port, DISP_EN_Pin, GPIO_PIN_SET);
+  MX_LTDC_Init();
+
+//  HAL_GPIO_WritePin(DISP_EN_GPIO_Port, DISP_EN_Pin, GPIO_PIN_SET);
+  HAL_Delay(165);
   HAL_GPIO_WritePin(LTDC_BL_PWM_GPIO_Port, LTDC_BL_PWM_Pin, GPIO_PIN_SET);
+  draw_frame();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  snprintf(s, sizeof(s), "%p", addr);
-//	  HAL_UART_Transmit(&huart1, s, strlen(s), 0x00FF);
-//	  if (addr >= (uint8_t*) (STARTING_ADDR + RAM_SIZE_BYTES)) {
-//		  addr = (uint8_t*)STARTING_ADDR;
-//	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

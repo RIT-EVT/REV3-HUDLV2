@@ -35,11 +35,13 @@ extern "C" {
 extern LTDC_HandleTypeDef hltdc;
 
 /* USER CODE BEGIN Private defines */
-typedef struct {
-	uint8_t blue;
-	uint8_t green;
-	uint8_t red;
-} color;
+#define SCREEN_WIDTH 	(800) // pixels
+#define SCREEN_HEIGHT 	(480) // pixels
+#define SCREEN_BPP		(3) // Bytes per pixel
+#define SCREEN_AREA		(SCREEN_WIDTH * SCREEN_HEIGHT)
+#define SCREEN_MEM_SIZE (SCREEN_AREA * SCREEN_BPP)
+
+
 /* USER CODE END Private defines */
 
 void MX_LTDC_Init(void);
